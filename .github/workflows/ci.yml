@@ -9,7 +9,7 @@ jobs:
     runs-on: windows-latest
     strategy:
       matrix:
-        npm_config_arch: [x64, arm64]
+        arch: [x64, arm64]
       fail-fast: false
 
     steps:
@@ -30,8 +30,8 @@ jobs:
         path: node_modules
         key: ${{ runner.os }}-node_modules-${{ hashFiles('yarn.lock') }}-${{ hashFiles('patches/*') }}
 
-    #- if: ${{ matrix.arch }} == arm64
-    #  run: set npm_config_arch=arm64
+    - run: rmdir node_modules
+    - run: set npm_config_arch=${{ matrix.arch }}
     - run: yarn install --frozen-lockfile
     - run: yarn generate
     - run: yarn lint
