@@ -7,6 +7,8 @@ on: [push]
 jobs:
   windows:
     runs-on: windows-latest
+    env:
+      npm_config_arch: ${{ matrix.arch }}
     strategy:
       matrix:
         arch: [x64, arm64]
