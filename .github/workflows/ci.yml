@@ -23,6 +23,15 @@ jobs:
       with:
         node-version: '12.20.1'
     - run: npm install -g yarn
+
+    - name: Cache node modules
+      uses: actions/cache@v1
+      env:
+        cache-name: cache-node-modules
+      with:
+        path: node_modules
+        key: ${{ runner.os }}-${{ matrix.arch }}-node_modules-${{ hashFiles('yarn.lock') }}-${{ hashFiles('patches/*') }}
+
     - run: yarn install
     - run: yarn generate
     - run: yarn lint
