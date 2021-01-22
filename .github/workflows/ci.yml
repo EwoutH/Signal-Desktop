@@ -32,7 +32,7 @@ jobs:
         path: node_modules
         key: ${{ runner.os }}-${{ matrix.arch }}-node_modules-${{ hashFiles('yarn.lock') }}-${{ hashFiles('patches/*') }}
 
-    - run: yarn install
+    - run: yarn install --frozen-lockfile
     - run: yarn generate
     - run: yarn lint
     - run: node build\grunt.js
