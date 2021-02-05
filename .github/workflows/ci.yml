@@ -5,75 +5,14 @@ name: CI
 on: [push, pull_request]
 
 jobs:
-  lint:
-    runs-on: ubuntu-latest
-
-    steps:
-    - run: lsb_release -a
-    - run: uname -a
-    - uses: actions/checkout@v2
-    - uses: actions/setup-node@v2
-      with:
-        node-version: '12.18.3'
-    - run: npm install -g yarn@1.22.0
-    - run: yarn install --frozen-lockfile
-    - run: yarn generate
-    - run: yarn lint
-    - run: yarn lint-deps
-    # - run: yarn lint-license-comments
-    - run: git diff --exit-code
-
-  macos:
-    needs: lint
-    runs-on: macos-latest
-    if: github.ref == 'refs/heads/development' || github.ref == 'refs/heads/master'
-
-    steps:
-    - run: uname -a
-    - uses: actions/checkout@v2
-    - uses: actions/setup-node@v2
-      with:
-        node-version: '12.18.3'
-    - run: npm install -g yarn@1.22.0
-    - run: yarn install --frozen-lockfile
-    - run: yarn generate
-    - run: yarn prepare-beta-build
-    - run: yarn build
-    - run: yarn test-node
-    - run: yarn test-electron
-    - run: yarn grunt test-release:osx
-      env:
-        NODE_ENV: production
-
-  linux:
-    needs: lint
-    runs-on: ubuntu-latest
-
-    steps:
-    - run: lsb_release -a
-    - run: uname -a
-    - uses: actions/checkout@v2
-    - uses: actions/setup-node@v2
-      with:
-        node-version: '12.18.3'
-    - run: sudo apt-get install xvfb
-    - run: npm install -g yarn@1.22.0
-    - run: yarn install --frozen-lockfile
-    - run: yarn generate
-    - run: yarn prepare-beta-build
-    - run: yarn build
-    - run: xvfb-run --auto-servernum yarn test-node
-    - run: xvfb-run --auto-servernum yarn test-electron
-      env:
-        LANG: en_US
-        LANGUAGE: en_US
-    - run: xvfb-run --auto-servernum yarn grunt test-release:linux
-      env:
-        NODE_ENV: production
-
   windows:
-    needs: lint
     runs-on: windows-latest
+    env:
+      npm_config_arch: ${{ matrix.arch }}
+    strategy:
+      matrix:
+        arch: [x64, arm64]
+      fail-fast: false
 
     steps:
     - run: systeminfo
@@ -84,7 +23,18 @@ jobs:
       with:
         node-version: '12.18.3'
     - run: npm install -g yarn@1.22.0
-    - run: yarn install --frozen-lockfile
+    - run: npm install -g node-gyp@5.1.0
+
+    - name: Cache node modules
+      uses: actions/cache@v2
+      env:
+        cache-name: cache-node-modules
+      with:
+        path: node_modules
+        key: ${{ runner.os }}-${{ matrix.arch }}-node_modules-${{ hashFiles('package.json') }}
+
+    - run: curl -s -S --create-dirs -o C:/Users/runneradmin/AppData/Local/node-gyp/Cache/12.15.0/arm64/node.lib https://unofficial-builds.nodejs.org/download/release/v12.15.0/win-arm64/node.lib
+    - run: yarn install
     - run: yarn generate
     - run: node build\grunt.js
     - run: yarn test-node

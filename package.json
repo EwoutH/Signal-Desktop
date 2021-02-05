@@ -62,7 +62,7 @@
     "fs-xattr": "0.3.0"
   },
   "dependencies": {
-    "@journeyapps/sqlcipher": "https://github.com/EvanHahn-signal/node-sqlcipher.git#16916949f0c010f6e6d3d5869b10a0ab813eae75",
+    "@journeyapps/sqlcipher": "5.0.0",
     "@sindresorhus/is": "0.8.0",
     "abort-controller": "3.0.0",
     "array-move": "2.1.0",
@@ -101,7 +101,7 @@
     "mustache": "2.3.0",
     "node-fetch": "2.6.1",
     "node-forge": "0.10.0",
-    "node-gyp": "5.0.3",
+    "node-gyp": "5.1.0",
     "normalize-path": "3.0.0",
     "os-locale": "3.0.1",
     "p-map": "2.1.0",
@@ -252,7 +252,7 @@
     "sass-loader": "7.2.0",
     "sinon": "9.2.0",
     "snyk": "1.316.1",
-    "spectron": "5.0.0",
+    "spectron": "^10.0.0",
     "style-loader": "1.0.0",
     "ts-loader": "4.1.0",
     "ts-node": "8.3.0",
