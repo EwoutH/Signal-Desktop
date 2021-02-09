@@ -21,7 +21,7 @@ jobs:
     - uses: actions/checkout@v2
     - uses: actions/setup-node@v2
       with:
-        node-version: '12.15.0'
+        node-version: '14.15.4'
     - run: npm install -g yarn@1.22.0
     - run: npm install -g node-gyp@5.1.0
 
@@ -33,7 +33,7 @@ jobs:
         path: node_modules
         key: ${{ runner.os }}-${{ matrix.arch }}-node_modules-${{ hashFiles('package.json') }}
 
-    - run: curl -s -S --create-dirs -o C:/Users/runneradmin/AppData/Local/node-gyp/Cache/12.15.0/arm64/node.lib https://unofficial-builds.nodejs.org/download/release/v12.15.0/win-arm64/node.lib
+    - run: curl -s -S --create-dirs -o C:/Users/runneradmin/AppData/Local/node-gyp/Cache/14.15.4/arm64/node.lib https://unofficial-builds.nodejs.org/download/release/v14.15.4/win-arm64/node.lib
       if: matrix.arch == 'arm64'
     - run: yarn install
     - run: yarn generate
